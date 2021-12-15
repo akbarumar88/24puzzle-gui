@@ -80,6 +80,7 @@ public class FrmMain {
         JButton bFill = new JButton("-");
         bPrev.setEnabled(false);
         bNext.setEnabled(false);
+        bSolve.setEnabled(false);
 
         //
         frame.add(b1);
@@ -123,12 +124,18 @@ public class FrmMain {
 
         final PuzzleState[] myState = {randomPuzzle(30)};
 
+        List<Action> actions1APerformed = new ArrayList<Action>();
         //Set Listener
         bShuffle.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 bPrev.setEnabled(false);
                 bNext.setEnabled(false);
+                bSolve.setEnabled(true);
+
+                //Clear histori aksi yg dieksekusi
+                actions1APerformed.clear();
+
                 //Inisialisasi Puzzle
                 myState[0] = randomPuzzle(30);
                 b1.setText(String.valueOf(myState[0].tiles[0][0]));
@@ -190,7 +197,6 @@ public class FrmMain {
 
         final Action[][] actions1A = new Action[1][];
 //        final Action[][] actions1APerformed = {};
-        List<Action> actions1APerformed = new ArrayList<Action>();
         bSolve.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -201,6 +207,7 @@ public class FrmMain {
                 bNext.setEnabled(true);
 
                 actions1A[0] = goal.getActions();
+                System.out.println("After solving, actions1A.length = " + actions1A[0].length);
                 Instant after = Instant.now();
                 long delta = Duration.between(before, after).toMillis(); // .toWhatsoever()
 
@@ -222,6 +229,8 @@ public class FrmMain {
 
                 double b = Node.effectiveBranchingFactor(4, goal.getDepth());
                 System.out.println("Effective Branching Factor: " + b);
+
+                bSolve.setEnabled(false);
             }
         });
 
@@ -229,7 +238,7 @@ public class FrmMain {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 bPrev.setEnabled(true);
-                System.out.println(actions1A[0].length);
+//                System.out.println(actions1A[0].length);
                 int currentSolutionIdx = actions1APerformed.size();
                 System.out.println(currentSolutionIdx);
                 Action currentAction = actions1A[0][actions1A[0].length-1-currentSolutionIdx];
