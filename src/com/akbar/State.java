@@ -34,6 +34,12 @@ public interface State {
      */
     public int misplacedTilesCount();
 
+    /**
+     * Menghitung jarak h(n) H4
+     * @return Jarak h(n) H4
+     */
+    public int myDistance();
+
     public String toString();
 
 }

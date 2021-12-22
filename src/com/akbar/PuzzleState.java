@@ -259,5 +259,24 @@ public final class PuzzleState implements State {
         return misplacedCount;
     }
 
+    /**
+     * Menghitung jarak h(n) H4
+     * @return int nilai h(n) dari current state
+     */
+    public int myDistance() {
+        int distance = 0;
+        for (int i = 0; i < this.tiles.length; i++) {
+            for (int j = 0; j < this.tiles[i].length; j++) {
+                int currentTile = this.tiles[i][j];
+                int rowShouldBe = (currentTile-1) / this.tiles.length;
+                int colShouldBe = (currentTile-1) % this.tiles.length;
+                int rowDiff = Math.abs(rowShouldBe - i);
+                int colDiff = Math.abs(colShouldBe - j);
+                distance += Math.max(rowDiff, colDiff);
+            }
+        }
+        return distance;
+    }
+
 
 }

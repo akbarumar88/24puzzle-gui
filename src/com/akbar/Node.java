@@ -15,6 +15,7 @@ public class Node {
     private final Action action;
     private final double cost;
     private final int    depth;
+    private int totalNodeGenerated;
 
     protected Node() {
         this(null, null, null, 0);
@@ -59,7 +60,8 @@ public class Node {
         this.state=state;
         this.parent=parent;
         this.action=action;
-        this.cost = this.state.misplacedTilesCount();
+//        this.cost = this.state.misplacedTilesCount();
+        this.cost = this.state.myDistance();
         if (parent!=null) {
             // Jika dia child, maka nilai g(n) adalah depth dari parentnya ditambah dengan 1.
             this.depth=parent.getDepth()+1;
@@ -68,6 +70,22 @@ public class Node {
             // Jika dia adalah root, maka g(n)=0.
             this.depth=0;
         }
+    }
+
+    /**
+     * Getter untuk prop totalNodeGenerated.
+     * @return totalNodeGenerated
+     */
+    public int getTotalNodeGenerated() {
+        return totalNodeGenerated;
+    }
+
+    /**
+     * Setter untuk prop totalNodeGenerated.
+     * @param totalNodeGenerated
+     */
+    public void setTotalNodeGenerated(int totalNodeGenerated) {
+        this.totalNodeGenerated = totalNodeGenerated;
     }
 
     /**
@@ -258,6 +276,7 @@ public class Node {
         List fringe = new ArrayList();
         List<Node> closed = new ArrayList<Node>();
         fringe.add(new Node(initial));
+        int nodeGenerated = 1; //Jumlah nNodes yang digenerate.
         // loop through all nodes in the fringe
         while (!fringe.isEmpty()) { // test if fringe is empty, if yes "failure"
             // poll the first node in the list
@@ -270,6 +289,7 @@ public class Node {
             State state=head.getState();
             // examine it to see if it is a goal state
             if (state.goal()) {
+                head.setTotalNodeGenerated(nodeGenerated);
                 return head; // if goal state then return this node
             }
             // consider using a "closed list" for visited states (avoiding repeated states)
@@ -281,10 +301,11 @@ public class Node {
                 if (!Helper.hasBeenVisited(successor, closed)) {
                     //Jika belum dikunjungi, maka diappend ke fringe.
                     fringe.add(successor);
+                    nodeGenerated++;
                 }
             }
 //            fringe.addAll(Arrays.asList(head.expand())); // a list adds new nodes to the end of the queue
-    }
+        }
         return null;
     }
 

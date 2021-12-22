@@ -122,7 +122,7 @@ public class FrmMain {
 //        frame.pack();
         frame.setVisible(true);
 
-        final PuzzleState[] myState = {randomPuzzle(30)};
+        final PuzzleState[] myState = {randomPuzzle(15)};
 
         List<Action> actions1APerformed = new ArrayList<Action>();
         //Set Listener
@@ -137,7 +137,7 @@ public class FrmMain {
                 actions1APerformed.clear();
 
                 //Inisialisasi Puzzle
-                myState[0] = randomPuzzle(30);
+                myState[0] = randomPuzzle(20);
                 b1.setText(String.valueOf(myState[0].tiles[0][0]));
                 b1.setBackground(myState[0].tiles[0][0] == 0 ? Color.YELLOW : null);
                 b2.setText(String.valueOf(myState[0].tiles[0][1]));
@@ -201,7 +201,7 @@ public class FrmMain {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 Instant before = Instant.now();
-                Node goal=Node.AStar(new PuzzleState(myState[0]));
+                Node goal = Node.AStar(new PuzzleState(myState[0]));
 //                Node goal=Node.breadthFirstSearch(new PuzzleState(myState), new ArrayList());
 
                 bNext.setEnabled(true);
@@ -226,8 +226,10 @@ public class FrmMain {
 
                 System.out.println("Total number of steps: " + actions1A[0].length);
                 System.out.println("Total amount of time in search: " + (delta / 1000) + " seconds.");
+                System.out.println("Total number of generated Node: " + goal.getTotalNodeGenerated());
+                System.out.println("Entire Tree Depth: " + goal.getDepth());
 
-                double b = Node.effectiveBranchingFactor(4, goal.getDepth());
+                double b = Node.effectiveBranchingFactor(goal.getTotalNodeGenerated(), goal.getDepth());
                 System.out.println("Effective Branching Factor: " + b);
 
                 bSolve.setEnabled(false);
